@@ -45,22 +45,24 @@ app.use(
 )
 
 /**
+ * Serve frontend static files
+ */
+app.use(express.static(path.join(__dirname, '../dist')))
+
+/**
+ * Handle React Router - serve index.html for all non-API routes
+ */
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'))
+})
+
+/**
  * error handler middleware
  */
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
     success: false,
     error: 'Server internal error',
-  })
-})
-
-/**
- * 404 handler
- */
-app.use((req: Request, res: Response) => {
-  res.status(404).json({
-    success: false,
-    error: 'API not found',
   })
 })
 
